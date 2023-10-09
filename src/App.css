@@ -1,6 +1,26 @@
 .App {
-  text-align: center;
+  flex: auto;
 }
+.Nav{
+  background-color: pink;
+  float: left;
+  width: 15%;
+  height: 100%;
+}
+.table{
+  background-color: bisque;
+  float: left;
+  width: 85%;
+  height: 10%;
+}
+.content{
+  background-color: olive;
+  float: left;
+  width: 85%;
+  height: 90%;
+}
+
+
 
 .App-logo {
   height: 40vmin;
