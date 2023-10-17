@@ -1,7 +1,7 @@
 import './index.css'
 import logo from '../../assets/images/logo.png'
 import { Link, useNavigate } from 'react-router-dom'
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import {
   AppstoreOutlined,
   ContainerOutlined,
@@ -11,10 +11,7 @@ import {
   MenuUnfoldOutlined,
   PieChartOutlined,
 } from '@ant-design/icons';
-
-
 import * as Icons from '@ant-design/icons';
-
 import { Button, Menu } from 'antd';
 import menuList from '../../config/menuConfig';
 
@@ -44,17 +41,32 @@ const items = [
   ]),
 ];
 
+  // 获取当前路径
+  const urlParams = new URL(window.location.href);
+  const pathname = urlParams?.pathname;
+  console.log("当前路径是：", pathname);
+
+  // 如果是分类下的子标题刷新的时候要展开导航
+  let openKey = '';
+
 function buildItems(menuList) {
-  return menuList.map(item =>{
-    if(!item.children){
+  return menuList.map(item => {
+    if (!item.children) {
       return {
         key: item.key,
         icon: React.createElement(Icons[item.icon]),
         label: item.title,
       };
-    }else{
+    } else {
       // 递归处理子元素
       const childrenItems = buildItems(item.children);
+
+      // 找当前路由匹配的字路由
+      const cItem = item.children.find(cItem => cItem.key === pathname);
+      if(cItem){
+        openKey = item.key;
+      }
+
       return {
         key: item.key,
         icon: React.createElement(Icons[item.icon]),
@@ -66,6 +78,8 @@ function buildItems(menuList) {
 }
 
 const newitems = buildItems(menuList);
+
+
 
 
 const LeftNav = () => {
@@ -110,8 +124,8 @@ const LeftNav = () => {
         }}
       >
         <Menu
-          defaultSelectedKeys={['1']}
-          defaultOpenKeys={['sub1']}
+          defaultSelectedKeys={[pathname]}
+          defaultOpenKeys={[openKey]}
           mode="inline"
           theme="dark"
           inlineCollapsed={collapsed}
