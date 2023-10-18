@@ -7,6 +7,7 @@ import storageUtils from '../../utils/storageUtils';
 import { reqWeather } from '../../api';
 import menuList from '../../config/menuConfig';
 import { Modal } from 'antd';
+import LinkButton from '../LinkButton';
 
 
 
@@ -92,9 +93,9 @@ const Header = () => {
         <div className='header'>
             <div className='header-top'>
                 <span>欢迎,{username}</span>
-                <a href='#!' onClick={logout}>退出</a>
-                <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                    <p>确定要退出么？</p>
+                <LinkButton onClick={logout}>退出</LinkButton>
+                <Modal title="确定要退出么？" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText="确认"
+                        cancelText="取消">
                 </Modal>
             </div>
             <div className='header-bottom'>
