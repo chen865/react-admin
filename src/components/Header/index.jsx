@@ -42,7 +42,7 @@ const Header = () => {
     };
 
     function getTime() {
-        console.log('获取时间的任务')
+        //console.log('获取时间的任务')
         setInterval(() => {
             const newCurrentTime = formateDate(Date.now());
             setCurrentTime(newCurrentTime);

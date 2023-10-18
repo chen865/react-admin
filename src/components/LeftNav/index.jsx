@@ -90,6 +90,7 @@ const LeftNav = () => {
 
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
+    console.log('左边导航栏的值',collapsed)
   };
 
   const handleClick = (item) => {
@@ -128,7 +129,7 @@ const LeftNav = () => {
           defaultOpenKeys={[openKey]}
           mode="inline"
           theme="dark"
-          inlineCollapsed={collapsed}
+          inlineCollapsed={true}
           items={newitems}
           onClick={handleClick}
         />
