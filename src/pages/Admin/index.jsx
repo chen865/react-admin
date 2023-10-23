@@ -24,11 +24,11 @@ const { Footer, Sider, Content } = Layout;
 //   backgroundColor: '#108ee9',
 // };
 const contentStyle = {
-  textAlign: 'center',
+  //textAlign: 'center',
   minHeight: 140,
   lineHeight: '120px',
   color: '#fff',
-  backgroundColor: '#108ee9',
+  //backgroundColor: '#108ee9',
   margin: 20
 };
 const siderStyle = {

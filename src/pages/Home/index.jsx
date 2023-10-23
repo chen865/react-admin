@@ -1,9 +1,10 @@
+import "./index.css"
 
 // 主页
 const Home = () => {
     return (
-        <div>
-            this is home
+        <div className="home">
+            欢迎使用ccxi后台管理系统
         </div>
     )
 }
