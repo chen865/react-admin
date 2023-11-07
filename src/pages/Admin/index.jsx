@@ -1,6 +1,6 @@
 import { Route, Routes, Navigate, useNavigate } from 'react-router-dom'
 import memoryUtils from '../../utils/memoryUtils';
-import { useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 import { Layout } from 'antd';
 import Header from '../../components/Header';
 import LeftNav from '../../components/LeftNav';
@@ -51,9 +51,10 @@ function Admin() {
 
   const user = memoryUtils.user
 
-  //console.log('admain管理页', user)
+  console.log('Admin 组件被渲染了'); // 添加这行日志
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    console.log('useEffect 被执行了'); // 添加这行日志
     const location = window.location;
     if (JSON.stringify(user) === '{}') {
       // 跳转到登录页面
@@ -61,9 +62,9 @@ function Admin() {
       location.reload(); // 强制刷新页面
       console.log("没有用户了，要跳转到登录页面");
     } else {
-      console.log("用户存在", user);
+      console.log("admin页面验证用户存在：", user);
     }
-  }, [navigate, user]); // 将 user 添加到依赖数组中
+  }, [user, navigate]); // 将 user 添加到依赖数组中
 
 
 
@@ -77,15 +78,15 @@ function Admin() {
           <Header />
           <Content style={contentStyle}>
             <Routes>
-              <Route path='/' element={<Navigate to='/home' />}/>
-              <Route path='/home' element={<Home/>} />
-              <Route path='/category' element={<Category/>} />
-              <Route path='/product' element={<Product/> }/>
-              <Route path='/role' element={<Role/>} />
-              <Route path='/user' element={<User/>} />
-              <Route path='/bar' element={<Bar/>}/>
-              <Route path='/line' element={<Line/>}/>
-              <Route path='/pie' element={<Pie/>}/>
+              <Route path='/home' element={<Home />} />
+              <Route path='/category' element={<Category />} />
+              <Route path='/product' element={<Product />} />
+              <Route path='/role' element={<Role />} />
+              <Route path='/user' element={<User />} />
+              <Route path='/bar' element={<Bar />} />
+              <Route path='/line' element={<Line />} />
+              <Route path='/pie' element={<Pie />} />
+              <Route path='/' element={<Navigate to='/home' />} />
             </Routes>
           </Content>
           <Footer style={footerStyle}>Copyright © 2023 - 2023  Chen.io</Footer>

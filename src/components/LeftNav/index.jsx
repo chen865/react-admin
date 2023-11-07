@@ -12,7 +12,7 @@ import {
   PieChartOutlined,
 } from '@ant-design/icons';
 import * as Icons from '@ant-design/icons';
-import { Button, Menu } from 'antd';
+import { Button, Menu, Layout } from 'antd';
 import menuList from '../../config/menuConfig';
 
 function getItem(label, key, icon, children, type) {
@@ -41,13 +41,13 @@ const items = [
   ]),
 ];
 
-  // 获取当前路径
-  const urlParams = new URL(window.location.href);
-  const pathname = urlParams?.pathname;
-  console.log("当前路径是：", pathname);
+// 获取当前路径
+const urlParams = new URL(window.location.href);
+const pathname = urlParams?.pathname;
+console.log("当前路径是：", pathname);
 
-  // 如果是分类下的子标题刷新的时候要展开导航
-  let openKey = '';
+// 如果是分类下的子标题刷新的时候要展开导航
+let openKey = '';
 
 function buildItems(menuList) {
   return menuList.map(item => {
@@ -63,7 +63,7 @@ function buildItems(menuList) {
 
       // 找当前路由匹配的字路由
       const cItem = item.children.find(cItem => cItem.key === pathname);
-      if(cItem){
+      if (cItem) {
         openKey = item.key;
       }
 
@@ -90,7 +90,7 @@ const LeftNav = () => {
 
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
-    console.log('左边导航栏的值',collapsed)
+    console.log('左边导航栏的值', collapsed)
   };
 
   const handleClick = (item) => {
@@ -124,24 +124,27 @@ const LeftNav = () => {
 
         }}
       >
-        <Menu
-          defaultSelectedKeys={[pathname]}
-          defaultOpenKeys={[openKey]}
-          mode="inline"
-          theme="dark"
-          inlineCollapsed={true}
-          items={newitems}
-          onClick={handleClick}
-        />
-        <Button
-          type="primary"
-          onClick={toggleCollapsed}
-          style={{
-            marginBottom: 16,
-          }}
-        >
-          {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-        </Button>
+        <Layout.Sider collapsed={collapsed}>
+          <Menu
+            defaultSelectedKeys={[pathname]}
+            defaultOpenKeys={[openKey]}
+            mode="inline"
+            theme="dark"
+
+            items={newitems}
+            onClick={handleClick}
+          />
+          <Button
+            type="primary"
+            onClick={toggleCollapsed}
+            style={{
+              marginBottom: 16,
+            }}
+          >
+            {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+          </Button>
+        </Layout.Sider>
+
       </div>
     </div>
 

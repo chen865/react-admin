@@ -44,3 +44,17 @@ export const reqWeather = (city) => {
 }
 //reqWeather('110101')
 
+
+// 获取商品分类
+export const reqCategorys = () => ajax(BASE + "/product/productCategory" , 'GET')
+
+// 获取商品子类
+export const reqChildCategorys = (id) => ajax(BASE + "/product/subcategory" , {id} , 'GET')
+
+// 添加商品分类
+export const reqAddCategorys = (name,parentId,classify) => ajax(BASE + "/product/addCategory" , {name,parentId,classify} , 'post')
+
+// 更新分类
+export const reqUpdateCategorys = ({id,name}) => ajax(BASE + "/product/updateCategoryName" , {id,name} , 'post')
+
+

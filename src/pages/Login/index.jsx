@@ -6,9 +6,10 @@ import { reqLogin } from '../../api';
 import { useNavigate } from 'react-router-dom';
 import memoryUtils from '../../utils/memoryUtils';
 import storageUtils from '../../utils/storageUtils';
-import { useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 
 const App = () => {
+
   const navigate = useNavigate();
 
   const onFinish = async (values) => {
@@ -51,7 +52,7 @@ const App = () => {
   const userHistory = memoryUtils.user
   console.log("判定是否登录了",userHistory)
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const location = window.location;
     if (JSON.stringify(userHistory) === '{}') {
       // 跳转到登录页面
@@ -59,11 +60,11 @@ const App = () => {
       // location.reload(); // 强制刷新页面
       console.log("没有用户了，要跳转到登录页面");
     } else {
-      navigate("/");
-      location.reload(); // 强制刷新页面
-      console.log("用户存在", userHistory);
+      navigate("/home");
+      //location.reload(); // 强制刷新页面
+      console.log("login页面验证用户存在:", userHistory);
     }
-  }, [navigate, userHistory]);
+  },[]);
 
 
   return (
