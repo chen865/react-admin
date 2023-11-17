@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Card, Table, Button, Space, message, Modal } from 'antd'
 import { PlusCircleOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import LinkButton from '../../components/LinkButton'
-import { reqCategorys, reqChildCategorys, reqUpdateCategorys } from '../../api';
+import { reqCategorys, reqChildCategorys, reqUpdateCategorys, reqAddCategorys } from '../../api';
 import AddForm from './addForm';
 import UpdateForm from './updateForm';
 
@@ -11,7 +11,7 @@ const Category = () => {
 
   const title = '一级分类列表';
   // 一级分类
-  const [categorys, setCategorys] = useState();
+  const [categorys, setCategorys] = useState([]);
   // 子集分类存储
   const [subCategorys, setSubCategorys] = useState([]);
   // 配置是否显示loading，设置默认值
@@ -127,34 +127,55 @@ const Category = () => {
   function showUpdate(record) {
     // 保存分类对象
     setCategory(record)
-    setModalStatus(2)
+    setModalStatus(2);
   }
 
   // 隐藏确定框
   function handleCancel() {
-    setModalStatus(0)
+    setModalStatus(0);
   }
 
-  function addCategorys() {
+  // 添加分类
+  async function addCategorys() {
+    // 隐藏确定框
+    setModalStatus(0);
 
+    // 发请求添加分类
+    const addId = parentId;
+    const addName = categoryName;
+    console.log('添加分类的参数：', parentId, addName);
+
+    const result = await reqAddCategorys(addName, addId, '');
+
+    if (result.data.code === 1) {
+      // 重新显示列表
+      if (parentId === 0) {
+        getCategorys();
+      } else {
+        getSubCategorys(parentId)
+      }
+    }
   }
-
 
   // 更新分类 
   async function updateCategorys() {
     // 隐藏确定框
-    setModalStatus(0)
+    setModalStatus(0);
 
     // 发请求更新分类
-    const categoryId = category.id
-    const paramName = categoryName
+    const categoryId = category.id;
+    const paramName = categoryName;
     //console.log('更新分类的参数：', categoryId, paramName)
 
-    const result = await reqUpdateCategorys(categoryId, paramName)
+    const result = await reqUpdateCategorys(categoryId, paramName);
 
     if (result.data.code === 1) {
       // 重新显示列表
-      getCategorys()
+      if (parentId === 0) {
+        getCategorys();
+      } else {
+        getSubCategorys(parentId)
+      }
     }
   }
 
@@ -187,8 +208,8 @@ const Category = () => {
         pagination={{ defaultPageSize: 5, showQuickJumper: true }}
         loading={loading}
       />
-      <Modal title="添加分类" open={modalStatus === 1} onOk={addCategorys} onCancel={handleCancel}>
-        <AddForm />
+      <Modal title="添加分类" open={modalStatus === 1} onOk={addCategorys} onCancel={handleCancel} destroyOnClose={true}>
+        <AddForm categorys={categorys} parentId={parentId} changeName={changeName} />
       </Modal>
       <Modal title="更新分类" open={modalStatus === 2} onOk={updateCategorys} onCancel={handleCancel} destroyOnClose={true} >
         <UpdateForm categoryName={categoryName1} changeName={changeName} />
