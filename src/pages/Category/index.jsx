@@ -1,18 +1,35 @@
-import { useState, useEffect} from 'react';
-import { Card, Table, Button, Space, message } from 'antd'
-import { PlusCircleOutlined } from '@ant-design/icons';
+import { useState, useEffect } from 'react';
+import { Card, Table, Button, Space, message, Modal } from 'antd'
+import { PlusCircleOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import LinkButton from '../../components/LinkButton'
-import { reqCategorys } from '../../api';
+import { reqCategorys, reqChildCategorys, reqUpdateCategorys } from '../../api';
+import AddForm from './addForm';
+import UpdateForm from './updateForm';
 
 // 商品分类
 const Category = () => {
 
   const title = '一级分类列表';
+  // 一级分类
+  const [categorys, setCategorys] = useState();
+  // 子集分类存储
+  const [subCategorys, setSubCategorys] = useState([]);
+  // 配置是否显示loading，设置默认值
+  const [loading, setLoading] = useState(false);
+  // 父级名称
+  const [parentName, setParentName] = useState('');
+  const [parentId, setParentId] = useState(0);
+  // 两个弹窗 0 不显示 1 添加 2 修改
+  const [modalStatus, setModalStatus] = useState(0);
 
-  const [categorys,setCategorys] = useState();
+  // 存储指定分类数据
+  const [category, setCategory] = useState({});
+
+  // 
+  const [categoryName, setCategoryName] = useState('');
 
   const extra = (
-    <Button type='primary'>
+    <Button type='primary' onClick={showAdd}>
       <PlusCircleOutlined />
       添加
     </Button>)
@@ -31,53 +48,151 @@ const Category = () => {
   // ];
 
   // 初始化数据
- 
-    const columns = [
-      {
-        title: '分类名称',
-        dataIndex: 'name',
-        key: 'name',
-      },
-      {
-        title: '操作',
-        dataIndex: '',
-        key: 'x',
-        width: 300,
-        render: () => (
-          <Space>
-            <LinkButton>修改分类</LinkButton >
-            <LinkButton>查看子类</LinkButton>
-          </Space>
-  
-        )
-      },
-    ];
+
+  const columns = [
+    {
+      title: '分类名称',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: '操作',
+      dataIndex: '',
+      key: 'x',
+      width: 300,
+      render: (record) => (
+        <Space>
+          <LinkButton onClick={() => showUpdate(record)}>修改分类</LinkButton >
+          {parentId === 0 ? <LinkButton onClick={() => showSubCategorys(record)}>查看子类</LinkButton> : null}
+        </Space>
+
+      )
+    },
+  ];
 
 
   // 获取分类数据 
-  async function getCategorys(){
+  async function getCategorys() {
+    // 发请求前，显示loading
+    setLoading(true);
     const result = await reqCategorys();
-    console.log(result)
-    if(result.data.code === 1){
+    // 请求完成后，隐藏loading
+    setLoading(false);
+    //console.log("获取分类里的请求：",result)
+    if (result.data.code === 1) {
       setCategorys(result.data.result.data);
-    }else {
+    } else {
       message.error('获取数据分类失败')
     }
-    
+
   }
+
+  // 获取子类数据
+  async function getSubCategorys(id) {
+    // 发请求前，显示loading
+    setLoading(true);
+    const result = await reqChildCategorys(id);
+    // 请求完成后，隐藏loading
+    setLoading(false);
+    if (result.data.code === 1) {
+      setSubCategorys(result.data.result.data);
+    } else {
+      message.error('获取数据分类失败')
+    }
+
+  }
+
+  // 显示指定一级分类的二级分类列表
+  function showSubCategorys(record) {
+    console.log('父级id', record)
+    // 父级名称
+    setParentName(record.name)
+    setParentId(record.id)
+    getSubCategorys(record.id)
+  }
+
+  // 显示一级分类列表
+  function showFirstCategorys() {
+    setParentName('')
+    setParentId(0)
+    setSubCategorys([])
+  }
+
+  // 显示添加弹窗
+  function showAdd() {
+    setModalStatus(1)
+  }
+
+  // 显示修改弹窗
+  function showUpdate(record) {
+    // 保存分类对象
+    setCategory(record)
+    setModalStatus(2)
+  }
+
+  // 隐藏确定框
+  function handleCancel() {
+    setModalStatus(0)
+  }
+
+  function addCategorys() {
+
+  }
+
+
+  // 更新分类 
+  async function updateCategorys() {
+    // 隐藏确定框
+    setModalStatus(0)
+
+    // 发请求更新分类
+    const categoryId = category.id
+    const paramName = categoryName
+    //console.log('更新分类的参数：', categoryId, paramName)
+
+    const result = await reqUpdateCategorys(categoryId, paramName)
+
+    if (result.data.code === 1) {
+      // 重新显示列表
+      getCategorys()
+    }
+  }
+
+
 
   useEffect(() => {
     getCategorys();
-   },[]); 
-  
+  }, []);
+
+  let categoryName1 = category.name || '';
+
+  // 为了父子组件传递数据使用
+  function changeName(name) {
+    //console.log('被调用了，父组件的name：', name)
+    setCategoryName(name);
+  }
 
   return (
     <Card
-      title={title}
+      title={parentId === 0 ? title : (<span>
+        <LinkButton onClick={showFirstCategorys}>{title}</LinkButton>
+        <ArrowRightOutlined style={{ marginRight: 5 }} />
+        <span>{parentName}</span>
+      </span>)}
+
       extra={extra}
       type="inner"
     >
-      <Table dataSource={categorys} columns={columns} bordered rowKey='id' />
+      <Table dataSource={parentId === 0 ? categorys : subCategorys} columns={columns} bordered rowKey='id'
+        pagination={{ defaultPageSize: 5, showQuickJumper: true }}
+        loading={loading}
+      />
+      <Modal title="添加分类" open={modalStatus === 1} onOk={addCategorys} onCancel={handleCancel}>
+        <AddForm />
+      </Modal>
+      <Modal title="更新分类" open={modalStatus === 2} onOk={updateCategorys} onCancel={handleCancel} destroyOnClose={true} >
+        <UpdateForm categoryName={categoryName1} changeName={changeName} />
+      </Modal>
     </Card>
   )
 }

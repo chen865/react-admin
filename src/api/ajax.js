@@ -31,10 +31,12 @@ export default function ajax(url, data = {}, type = 'GET') {
   return new Promise((resolve, reject) => {
     let promise;
     if (type === 'GET') {
-      promise = axios.get(url, data)
+      promise = data ? axios.get(url, {
+        params: data
+      }) : axios.get(url)
 
     } else {
-      promise = axios.post(url, data)
+      promise = axios.post(url,data)
 
     }
     promise.then(function (response) {
@@ -44,9 +46,9 @@ export default function ajax(url, data = {}, type = 'GET') {
       //   message.error('请求出错了,'+ response.data.msg)
       // }
     }).catch(function (error) {
-       //console.log('模版里响应失败：', error);
-       message.error('请求出错了',error.message)
-      });
+      //console.log('模版里响应失败：', error);
+      message.error('请求出错了', error.message)
+    });
 
   })
 

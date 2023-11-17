@@ -85,8 +85,8 @@ const Header = () => {
     useLayoutEffect(() => {
         // 更新时间
         getTime();
-        // 获取天气
-        getWeather();
+        // 获取天气 暂时屏蔽
+        //getWeather();
     },);
 
     return (

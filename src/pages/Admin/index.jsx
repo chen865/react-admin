@@ -51,10 +51,10 @@ function Admin() {
 
   const user = memoryUtils.user
 
-  console.log('Admin 组件被渲染了'); // 添加这行日志
+ //console.log('Admin 组件被渲染了'); // 添加这行日志
 
   useEffect(() => {
-    console.log('useEffect 被执行了'); // 添加这行日志
+    //console.log('useEffect 被执行了'); // 添加这行日志
     const location = window.location;
     if (JSON.stringify(user) === '{}') {
       // 跳转到登录页面
@@ -62,7 +62,7 @@ function Admin() {
       location.reload(); // 强制刷新页面
       console.log("没有用户了，要跳转到登录页面");
     } else {
-      console.log("admin页面验证用户存在：", user);
+      console.log("admin页面验证用户存在:", user);
     }
   }, [user, navigate]); // 将 user 添加到依赖数组中
 
