@@ -1,33 +1,34 @@
 import { Form, Select, Input } from 'antd';
 import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 
 const { Item } = Form;
 const { Option } = Select;
 
 const AddForm = (props) => {
 
-    const { categorys, parentId,changeName } = props;
+    const { categorys, parentId, saveForm } = props;
 
-        // 调用父组件来更新数据
-        function changeNameChild(name) {
-            //console.log('子组件的输入的name：', name)
-            changeName(name)
-        }
+    const [form] = Form.useForm();
+
+    useEffect(() => {
+        saveForm(form);
+    }, [form, saveForm]);
 
     return (
         <div>
-            <Form>
-                <Item >
-                    <Select defaultValue={parentId}>
-                        <Option value = {0} >一级分类</Option>
+            <Form form={form}>
+                <Item name='addId' initialValue={parentId} >
+                    <Select>
+                        <Option value={0} >一级分类</Option>
                         {
-                            categorys.map(c =>  <Option key={c.id} value={c.id}>{c.name}</Option>)
+                            categorys.map(c => <Option key={c.id} value={c.id}>{c.name}</Option>)
                         }
                     </Select>
                 </Item>
 
-                <Item name='name'>
-                    <Input placeholder='请输入分类名称' onChange={(event) => changeNameChild(event.target.value)}></Input>
+                <Item name='addName'>
+                    <Input placeholder='请输入分类名称'></Input>
                 </Item>
 
             </Form>

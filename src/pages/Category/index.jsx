@@ -25,9 +25,6 @@ const Category = () => {
   // 存储指定分类数据
   const [category, setCategory] = useState({});
 
-  // 
-  const [categoryName, setCategoryName] = useState('');
-
   const extra = (
     <Button type='primary' onClick={showAdd}>
       <PlusCircleOutlined />
@@ -128,6 +125,7 @@ const Category = () => {
     // 保存分类对象
     setCategory(record)
     setModalStatus(2);
+    console.log('修改的分类：', record)
   }
 
   // 隐藏确定框
@@ -135,16 +133,19 @@ const Category = () => {
     setModalStatus(0);
   }
 
+  let formInstance;
+
+  function saveForm(form) {
+    formInstance = form;
+  }
+
   // 添加分类
   async function addCategorys() {
     // 隐藏确定框
     setModalStatus(0);
-
     // 发请求添加分类
-    const addId = parentId;
-    const addName = categoryName;
-    console.log('添加分类的参数：', parentId, addName);
-
+    const { addId, addName } = formInstance.getFieldsValue();
+    console.log('父亲添加分类的参数：', addId, addName);
     const result = await reqAddCategorys(addName, addId, '');
 
     if (result.data.code === 1) {
@@ -164,10 +165,10 @@ const Category = () => {
 
     // 发请求更新分类
     const categoryId = category.id;
-    const paramName = categoryName;
-    //console.log('更新分类的参数：', categoryId, paramName)
+    const { updateName } = formInstance.getFieldsValue();
+    console.log('更新分类的参数：', categoryId, updateName)
 
-    const result = await reqUpdateCategorys(categoryId, paramName);
+    const result = await reqUpdateCategorys(categoryId, updateName);
 
     if (result.data.code === 1) {
       // 重新显示列表
@@ -187,11 +188,6 @@ const Category = () => {
 
   let categoryName1 = category.name || '';
 
-  // 为了父子组件传递数据使用
-  function changeName(name) {
-    //console.log('被调用了，父组件的name：', name)
-    setCategoryName(name);
-  }
 
   return (
     <Card
@@ -209,10 +205,10 @@ const Category = () => {
         loading={loading}
       />
       <Modal title="添加分类" open={modalStatus === 1} onOk={addCategorys} onCancel={handleCancel} destroyOnClose={true}>
-        <AddForm categorys={categorys} parentId={parentId} changeName={changeName} />
+        <AddForm categorys={categorys} parentId={parentId} saveForm={saveForm} />
       </Modal>
       <Modal title="更新分类" open={modalStatus === 2} onOk={updateCategorys} onCancel={handleCancel} destroyOnClose={true} >
-        <UpdateForm categoryName={categoryName1} changeName={changeName} />
+        <UpdateForm categoryName={categoryName1} saveForm={saveForm} />
       </Modal>
     </Card>
   )
