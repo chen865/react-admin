@@ -125,7 +125,6 @@ const Category = () => {
     // 保存分类对象
     setCategory(record)
     setModalStatus(2);
-    console.log('修改的分类：', record)
   }
 
   // 隐藏确定框
@@ -145,7 +144,7 @@ const Category = () => {
     setModalStatus(0);
     // 发请求添加分类
     const { addId, addName } = formInstance.getFieldsValue();
-    console.log('父亲添加分类的参数：', addId, addName);
+    //console.log('父亲添加分类的参数：', addId, addName);
     const result = await reqAddCategorys(addName, addId, '');
 
     if (result.data.code === 1) {
@@ -166,7 +165,7 @@ const Category = () => {
     // 发请求更新分类
     const categoryId = category.id;
     const { updateName } = formInstance.getFieldsValue();
-    console.log('更新分类的参数：', categoryId, updateName)
+    //console.log('更新分类的参数：', categoryId, updateName)
 
     const result = await reqUpdateCategorys(categoryId, updateName);
 
