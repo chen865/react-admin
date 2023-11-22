@@ -18,7 +18,11 @@ const UpdateForm = (props) => {
     return (
         <div>
             <Form form={form}>
-                <Item name='updateName' initialValue={categoryName} value={categoryName} >
+                <Item name='updateName' initialValue={categoryName} value={categoryName}
+                    rules={[{
+                        required: true,
+                        message: '分类名称必须输入'
+                    }]} >
                     <Input placeholder='请输入分类名称'></Input>
                 </Item>
             </Form>

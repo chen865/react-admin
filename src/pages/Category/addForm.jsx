@@ -27,7 +27,10 @@ const AddForm = (props) => {
                     </Select>
                 </Item>
 
-                <Item name='addName'>
+                <Item name='addName' rules={[{
+                        required: true,
+                        message: '分类名称必须输入'
+                    }]}>
                     <Input placeholder='请输入分类名称'></Input>
                 </Item>
 

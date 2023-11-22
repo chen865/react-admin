@@ -139,44 +139,63 @@ const Category = () => {
   }
 
   // 添加分类
-  async function addCategorys() {
-    // 隐藏确定框
-    setModalStatus(0);
-    // 发请求添加分类
-    const { addId, addName } = formInstance.getFieldsValue();
-    //console.log('父亲添加分类的参数：', addId, addName);
-    const result = await reqAddCategorys(addName, addId, '');
+  function addCategorys() {
 
-    if (result.data.code === 1) {
-      // 重新显示列表
-      if (parentId === 0) {
-        getCategorys();
-      } else {
-        getSubCategorys(parentId)
+
+    // 表单验证
+    formInstance.validateFields().then(async () => {
+      // 隐藏确定框
+      setModalStatus(0);
+      // 发请求添加分类
+      const { addId, addName } = formInstance.getFieldsValue();
+      //console.log('父亲添加分类的参数：', addId, addName);
+      const result = await reqAddCategorys(addName, addId, '');
+
+      if (result.data.code === 1) {
+        // 重新显示列表
+        if (parentId === 0 && addId === 0) {
+          // 一级下添加一级刷新数据
+          getCategorys();
+        } else if (parentId === addId) {
+          // 二级下添加二级刷新数据
+          getSubCategorys(parentId)
+        } else if (addId === 0) {
+          // 在二级下添加一级刷新数据
+          getCategorys();
+        }
       }
-    }
+    }).catch((errorInfo) => {
+      console.log('验证失败,添加分类失败。')
+    })
   }
 
   // 更新分类 
-  async function updateCategorys() {
-    // 隐藏确定框
-    setModalStatus(0);
+  function updateCategorys() {
 
-    // 发请求更新分类
-    const categoryId = category.id;
-    const { updateName } = formInstance.getFieldsValue();
-    //console.log('更新分类的参数：', categoryId, updateName)
+    // 表单验证
+    formInstance.validateFields().then(async () => {
+      // 隐藏确定框
+      setModalStatus(0);
 
-    const result = await reqUpdateCategorys(categoryId, updateName);
+      // 发请求更新分类
+      const categoryId = category.id;
+      const { updateName } = formInstance.getFieldsValue();
+      //console.log('更新分类的参数：', categoryId, updateName)
 
-    if (result.data.code === 1) {
-      // 重新显示列表
-      if (parentId === 0) {
-        getCategorys();
-      } else {
-        getSubCategorys(parentId)
+      const result = await reqUpdateCategorys(categoryId, updateName);
+
+      if (result.data.code === 1) {
+        // 重新显示列表
+        if (parentId === 0) {
+          getCategorys();
+        } else {
+          getSubCategorys(parentId)
+        }
       }
-    }
+    }).catch((errorInfo) => {
+      console.log('验证失败,更新分类失败。')
+    })
+
   }
 
 
