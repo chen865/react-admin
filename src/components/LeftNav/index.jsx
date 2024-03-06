@@ -43,7 +43,7 @@ const items = [
 
 // 获取当前路径
 const urlParams = new URL(window.location.href);
-const pathname = urlParams?.pathname;
+let pathname = urlParams?.pathname;
 console.log("当前路径是：", pathname);
 
 // 如果是分类下的子标题刷新的时候要展开导航
@@ -62,8 +62,15 @@ function buildItems(menuList) {
       const childrenItems = buildItems(item.children);
 
       // 找当前路由匹配的字路由
-      const cItem = item.children.find(cItem => cItem.key === pathname);
-      if (cItem) {
+      let result = false;
+      item.children.find(cItem => {
+        if( pathname.indexOf(cItem.key) === 0){
+          result = true;
+          pathname = cItem.key;
+        }
+      });
+      
+      if (result) {
         openKey = item.key;
       }
 
