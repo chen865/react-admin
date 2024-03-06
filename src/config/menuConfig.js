@@ -20,15 +20,16 @@ const menuList = [
     icon: 'ShopOutlined',
     children: [
         {
+            title: '品类管理',
+            key: '/category',
+            icon: 'ProfileOutlined'
+        },
+        {
             title: '商品管理',
             key: '/product',
             icon: 'ReconciliationOutlined'
         },
-        {
-            title: '品类管理',
-            key: '/category',
-            icon: 'ProfileOutlined'
-        }
+       
     ]
 },
 {

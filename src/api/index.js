@@ -57,4 +57,8 @@ export const reqAddCategorys = (name,parentId,classify) => ajax(BASE + "/product
 // 更新分类
 export const reqUpdateCategorys = (id,name) => ajax(BASE + "/product/updateCategoryName" , {id,name} , 'post')
 
+// 获取商品分页列表数据
+export const reqAllGoods = (page,size,name,type) => ajax(BASE + "/goods/allGoods" , {page,size,name,type} , 'GET')
 
+// 修改商品的上架/下架状态
+export const reqGoodsStatus = (id,status) => ajax(BASE + "/goods/updateStatus" , {id,status} , 'GET')

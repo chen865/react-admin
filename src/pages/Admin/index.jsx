@@ -80,16 +80,16 @@ function Admin() {
             <Routes>
               <Route path='/home' element={<Home />} />
               <Route path='/category' element={<Category />} />
-              <Route path='/product' element={<Product />} />
+              <Route path='/product/*' element={<Product />} />
               <Route path='/role' element={<Role />} />
               <Route path='/user' element={<User />} />
               <Route path='/bar' element={<Bar />} />
               <Route path='/line' element={<Line />} />
               <Route path='/pie' element={<Pie />} />
-              <Route path='/' element={<Navigate to='/home' />} />
+              <Route path='/*' element={<Navigate to='/home' />} />
             </Routes>
           </Content>
-          <Footer style={footerStyle}>Copyright © 2023 - 2023  Chen.io</Footer>
+          <Footer style={footerStyle}>Copyright © 2023 - 2024  Chen.io</Footer>
         </Layout>
       </Layout>
     </div>
