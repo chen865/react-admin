@@ -23,6 +23,7 @@ root.render(
     },
   }}
 >
+{/* 这个app外面包裹的去掉后就是去掉严格模式 */}
   <React.StrictMode>
     <App />
   </React.StrictMode>

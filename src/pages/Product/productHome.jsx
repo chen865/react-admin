@@ -123,7 +123,7 @@ const ProdcutHome = () => {
                 return (
                     <span>
                         <LinkButton onClick={() => navigate("/product/details", { state: { product } })}>详情</LinkButton>
-                        <LinkButton>修改</LinkButton>
+                        <LinkButton onClick={() => navigate("/product/addAndUpdate", { state: { product } })}>修改</LinkButton>
                     </span>
                 )
             }
@@ -146,7 +146,7 @@ const ProdcutHome = () => {
     )
 
     const extra = (
-        <Button type='primary'>
+        <Button type='primary' onClick={() => navigate("/product/addAndUpdate")}>
             <PlusOutlined />
             添加商品
         </Button>

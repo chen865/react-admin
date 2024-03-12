@@ -66,7 +66,7 @@ const ProdcutDetail = () => {
                             <span>
                                 {
                                     objPicture.map(img => (
-                                        <img className='goods-img' src={img.picture} key={img.picture} alt='img' />
+                                        <img className='goods-img' src={img.url} key={img.name} alt='img' />
 
                                     ))
                                 }

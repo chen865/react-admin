@@ -68,7 +68,8 @@ const Header = () => {
                 titie = item.title;
             } else if (item.children) {
                 // 子item查找
-                const cItem = item.children.find(cItem => cItem.key === pathname);
+                //const cItem = item.children.find(cItem => cItem.key === pathname);
+                const cItem = item.children.find(cItem => pathname.indexOf(cItem.key) === 0 );
                 // 有值表示匹配了
                 if (cItem) {
                     titie = cItem.title;

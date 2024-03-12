@@ -11,7 +11,8 @@
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <link rel="stylesheet" type="text/css" href="./css/public.css">
+    <!-- %PUBLIC_URL%是在React应用中用于引用public目录的一个变量，下面的css之前没有写这个，在去子路径的时候就提示报错 -->
+    <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/css/public.css">
     <title>我的第一个react项目</title>
   </head>
   <body>

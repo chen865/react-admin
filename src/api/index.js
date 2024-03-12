@@ -62,3 +62,9 @@ export const reqAllGoods = (page,size,name,type) => ajax(BASE + "/goods/allGoods
 
 // 修改商品的上架/下架状态
 export const reqGoodsStatus = (id,status) => ajax(BASE + "/goods/updateStatus" , {id,status} , 'GET')
+
+// 获取商品分类
+export const reqCategoryCascade = () => ajax(BASE + "/product/categoryCascade" ,{} , 'GET')
+
+// 删除上传的图片根据名称
+export const reqDeletePicture = (name) => ajax(BASE + "/goods/deletePicture" , {name} , 'post')
