@@ -80,11 +80,11 @@ const ProdcutAddAndUpdate = () => {
             goods.goodsId = product.goodsId;
         }
 
-        console.log('封装的商品对象', goods);
+        //console.log('封装的商品对象', goods);
 
-        const resutl = await reqAddOrUpdateGoods(goods);
-        console.log('添加或更新商品', resutl);
-        if (resutl.data.code === 1) {
+        const result = await reqAddOrUpdateGoods(goods);
+
+        if (result.data.code === 1) {
             message.success('操作成功');
             // 返回上一级页面
             window.history.back();
