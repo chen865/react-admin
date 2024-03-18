@@ -1,13 +1,13 @@
-import { Card, Button, Form, Input, Cascader, Tooltip } from 'antd'
+import { Card, Button, Form, Input, Cascader, Tooltip, message } from 'antd'
 import {
     EditOutlined,
     InfoCircleOutlined
 } from '@ant-design/icons';
-import { reqCategoryCascade } from '../../api'
+import { reqCategoryCascade, reqAddOrUpdateGoods } from '../../api'
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom'
 import PictureWall from './picture-wall';
-import RichTextEditor from './richTextEditor';
+//import RichTextEditor from './richTextEditor';
 import TinymceText from './tinymceText';
 
 
@@ -46,15 +46,51 @@ const ProdcutAddAndUpdate = () => {
     };
 
     const updateForm = async (values) => {
-        // 表单教研成果后
-        console.log('表单的校验: ', values);
+        // 表单校验成功后
 
         // 调用子组件的 getImages 函数
         const imageUrl = childRef.current.getImages();
-        console.log('子组件的图片地址', imageUrl);
+        //console.log('子组件的图片地址', imageUrl);
 
         const detail = getDetail.current.getDetail();
-        console.log('富文本编辑器的内容', detail);
+        //console.log('富文本编辑器的内容', detail);
+
+        // 封装商品对象
+        const { goodsName, goodsDesc, goodsPrice, goodsCategory } = values;
+
+        let categoryId, parentCategoryId;
+        if (goodsCategory.length === 1) {
+            parentCategoryId = goodsCategory[0];
+        } else {
+            parentCategoryId = goodsCategory[0];
+            categoryId = goodsCategory[1];
+        }
+
+        const goods = {
+            goodsName,
+            goodsDesc,
+            goodsPrice,
+            categoryId,
+            parentCategoryId,
+            picturesArray: imageUrl,
+            goodsDetail: detail
+        }
+
+        if (state != null) {
+            goods.goodsId = product.goodsId;
+        }
+
+        console.log('封装的商品对象', goods);
+
+        const resutl = await reqAddOrUpdateGoods(goods);
+        console.log('添加或更新商品', resutl);
+        if (resutl.data.code === 1) {
+            message.success('操作成功');
+            // 返回上一级页面
+            window.history.back();
+        }else{
+            message.error('操作失败');
+        }
     }
 
     const [options, setOptions] = useState([])
@@ -121,9 +157,9 @@ const ProdcutAddAndUpdate = () => {
 
                     <Form.Item label='商品分类'
                         name='goodsCategory'
-                        initialValue={ product.parentCategoryId != null ? 
-                            product.categoryId != null ? [product.parentCategoryId.toString(), product.categoryId.toString()] 
-                            : [product.parentCategoryId.toString()] :[] }
+                        initialValue={product.parentCategoryId != null ?
+                            product.categoryId != null ? [product.parentCategoryId.toString(), product.categoryId.toString()]
+                                : [product.parentCategoryId.toString()] : []}
                         rules={[
                             {
                                 type: 'array',
@@ -148,8 +184,8 @@ const ProdcutAddAndUpdate = () => {
                        <RichTextEditor ref={getDetail} detail={product.goodsDetail} />
                     </Form.Item> */}
 
-                    <Form.Item label='新的商品详情' labelCol={{span: 2}} wrapperCol={{span: 20}} >
-                       <TinymceText ref={getDetail} detail={product.goodsDetail} />
+                    <Form.Item label='新的商品详情' labelCol={{ span: 2 }} wrapperCol={{ span: 20 }} >
+                        <TinymceText ref={getDetail} detail={product.goodsDetail} />
                     </Form.Item>
 
                     <Form.Item>

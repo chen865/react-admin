@@ -1,8 +1,7 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
-import { reqDeletePicture } from '../../api';
 
-
+// 富文本编辑器
 const TinymceText = forwardRef((props, ref) => {
 
         const editorRef = useRef(null);
@@ -14,7 +13,7 @@ const TinymceText = forwardRef((props, ref) => {
 
         const handleEditorChange = (content, editor) => {
                 // Handle editor content change    
-                console.log('文本里的内容:', content);
+                //console.log('文本里的内容:', content);
                 //console.log('文本里的内容2:', editor);
                 setUserContent(content);
         };
@@ -30,19 +29,42 @@ const TinymceText = forwardRef((props, ref) => {
 
 
         // 自定义上传图片函数
-        function uploadImage(blobInfo, succFun, failFun) {
-                console.log('自定义图片上传🤔', blobInfo, succFun, failFun)
-                // 获取 blob 数据
-                const blob = blobInfo.blob();
+        const uploadImage = (blobInfo, progress) => new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.withCredentials = false;
+                xhr.open('POST', '/goods/uploadPicture');
 
-                // 创建 File 对象
-                const file = new File([blob], blobInfo.filename(), { type: blob.type });
+                xhr.upload.onprogress = (e) => {
+                        progress(e.loaded / e.total * 100);
+                };
 
-                // 现在，你可以将 'file' 对象用于上传等操作
-                console.log('转换后的 File 对象:', file);
+                xhr.onload = () => {
+                        if (xhr.status === 403) {
+                                reject({ message: '接口请求错误: ' + xhr.status, remove: true });
+                                return;
+                        }
+                        if (xhr.status < 200 || xhr.status >= 300) {
+                                reject('接口请求错误: ' + xhr.status);
+                                return;
+                        }
+                        const json = JSON.parse(xhr.responseText);
 
+                        if (!json || typeof json.result.data.url != 'string') {
+                                reject('无效的json: ' + xhr.responseText);
+                                return;
+                        }
+                        // 返回图片的url
+                        resolve(json.result.data.url);
+                };
+                xhr.onerror = () => {
+                        reject('由于XHR传输错误，图像上传失败。代码:' + xhr.status);
+                };
 
-        }
+                const formData = new FormData();
+                formData.append('image', blobInfo.blob(), blobInfo.filename());
+                xhr.send(formData);
+        });
+
 
 
         return (
@@ -55,6 +77,7 @@ const TinymceText = forwardRef((props, ref) => {
                         apiKey="kmw6h88qawp9lsni62izfphho2gpagfasfe67dol0c4p7lj2"
                         init={{
                                 language: 'zh-Hans',
+                                selector: 'textarea',
                                 width: 1046,
                                 min_height: 600,
                                 plugins: 'preview searchreplace autolink directionality visualblocks visualchars fullscreen image link code codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help emoticons autosave autoresize ',

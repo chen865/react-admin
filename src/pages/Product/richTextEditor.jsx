@@ -6,7 +6,7 @@ import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 
-// 富文本编辑器
+// 富文本编辑器- 这个作废了用了tinymcetext
 const RichTextEditor = forwardRef((props, ref) => {
 
     // 从父组件获取图片

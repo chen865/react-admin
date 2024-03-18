@@ -11,22 +11,22 @@ import { message } from 'antd';
 
 const BASE = ''
 
-export const reqLogin = (account,password) =>{
-    const data =qs.stringify({
+export const reqLogin = (account, password) => {
+    const data = qs.stringify({
         account: account,
         password: password,
     })
 
     const headers = {
-        'content-type': 'application/x-www-form-urlencoded' 
+        'content-type': 'application/x-www-form-urlencoded'
     };
 
-   return ajax(BASE + '/newAdminLogin',data,'POST',headers);
+    return ajax(BASE + '/newAdminLogin', data, 'POST', headers);
 }
 
 export const reqWeather = (city) => {
 
-    return new Promise((resolve,reject) =>{
+    return new Promise((resolve, reject) => {
         const url = `https://restapi.amap.com/v3/weather/weatherInfo?key=d1c8fe21873308c24f3c0669698a73ae&output=json&city=${city}&extensions=base`;
         jsonp(url, {}, (err, data) => {
             //console.log('高德天气api：', err, data);
@@ -46,25 +46,28 @@ export const reqWeather = (city) => {
 
 
 // 获取商品分类
-export const reqCategorys = () => ajax(BASE + "/product/productCategory" ,{},'GET')
+export const reqCategorys = () => ajax(BASE + "/product/productCategory", {}, 'GET')
 
 // 获取商品子类
-export const reqChildCategorys = (id) => ajax(BASE + "/product/subcategory" , {id} , 'GET')
+export const reqChildCategorys = (id) => ajax(BASE + "/product/subcategory", { id }, 'GET')
 
 // 添加商品分类
-export const reqAddCategorys = (name,parentId,classify) => ajax(BASE + "/product/addCategory" , {name,parentId,classify} , 'post')
+export const reqAddCategorys = (name, parentId, classify) => ajax(BASE + "/product/addCategory", { name, parentId, classify }, 'POST')
 
 // 更新分类
-export const reqUpdateCategorys = (id,name) => ajax(BASE + "/product/updateCategoryName" , {id,name} , 'post')
+export const reqUpdateCategorys = (id, name) => ajax(BASE + "/product/updateCategoryName", { id, name }, 'POST')
 
 // 获取商品分页列表数据
-export const reqAllGoods = (page,size,name,type) => ajax(BASE + "/goods/allGoods" , {page,size,name,type} , 'GET')
+export const reqAllGoods = (page, size, name, type) => ajax(BASE + "/goods/allGoods", { page, size, name, type }, 'GET')
 
 // 修改商品的上架/下架状态
-export const reqGoodsStatus = (id,status) => ajax(BASE + "/goods/updateStatus" , {id,status} , 'GET')
+export const reqGoodsStatus = (id, status) => ajax(BASE + "/goods/updateStatus", { id, status }, 'GET')
 
 // 获取商品分类
-export const reqCategoryCascade = () => ajax(BASE + "/product/categoryCascade" ,{} , 'GET')
+export const reqCategoryCascade = () => ajax(BASE + "/product/categoryCascade", {}, 'GET')
 
 // 删除上传的图片根据名称
-export const reqDeletePicture = (name) => ajax(BASE + "/goods/deletePicture" , {name} , 'post')
+export const reqDeletePicture = (name) => ajax(BASE + "/goods/deletePicture", { name }, 'POST')
+
+// 添加和更新商品，根据id判断
+export const reqAddOrUpdateGoods = (goods) => ajax(BASE + "/goods/addOrUpdateGoods", goods, 'POST')

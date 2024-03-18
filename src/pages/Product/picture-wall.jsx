@@ -58,7 +58,7 @@ const PictureWall = forwardRef((props, ref) => {
   };
 
   const handleChange = async ({ file,fileList: newFileList }) => {
-    console.log('上传一次成功？',file)
+    //console.log('上传一次成功？',file)
     // 这里有个bug，上传图片后已经成功了，但是显示的是uploading状态 加了这个set后图片可以正常上传了
     setFileList(newFileList);
 
@@ -81,7 +81,7 @@ const PictureWall = forwardRef((props, ref) => {
     }else if(file.status === 'removed'){
       // 删除图片
       const result = await reqDeletePicture(file.name);
-      console.log('删除图片1111:',result);
+      //console.log('删除图片1111:',result);
       if(result.data.code === 1){
         message.success('删除图片成功');  
       }else{
