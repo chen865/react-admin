@@ -36,11 +36,7 @@ export default function ajax(url, data = {}, type = 'GET') {
       }) : axios.get(url)
 
     } else {
-      promise = axios.post(url, data, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+      promise = axios.post(url, data)
 
     }
     promise.then(function (response) {

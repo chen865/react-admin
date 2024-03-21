@@ -21,7 +21,7 @@ export const reqLogin = (account, password) => {
         'content-type': 'application/x-www-form-urlencoded'
     };
 
-    return ajax(BASE + '/newAdminLogin', data, 'POST', headers);
+    return ajax(BASE + '/user/login', data, 'POST', headers);
 }
 
 export const reqWeather = (city) => {
@@ -71,3 +71,12 @@ export const reqDeletePicture = (name) => ajax(BASE + "/goods/deletePicture", { 
 
 // 添加和更新商品，根据id判断
 export const reqAddOrUpdateGoods = (goods) => ajax(BASE + "/goods/addOrUpdateGoods", goods, 'POST')
+
+// 获取全部角色
+export const reqAllRoles = (roles) => ajax(BASE + "/user/allRoles", roles , 'POST')
+
+// 添加角色
+export const reqAddRole = (name) => ajax(BASE + "/user/addRole", {name}, 'GET')
+
+// 更新角色的授权页面
+export const reqUpdateRoleAuth = (role) => ajax(BASE + "/user/updateRoleAuth", role, 'POST')

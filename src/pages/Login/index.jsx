@@ -19,25 +19,24 @@ const App = () => {
     const { username, password, remember } = values;
     console.log(username, password, remember)
 
-    // // 接口返回的数据内容
-    // const response = await reqLogin(username, password)
-    // console.log('访问成功', response)
-    // const result = response.data
-    // if(result.code === 1){
-    //   message.success('登录成功')
-    //   // 跳转到后台页面
+    // 接口返回的数据内容
+    const response = await reqLogin(username, password)
+    //console.log('访问成功', response)
+    const result = response.data
+    if (result.code === 1) {
+      message.success('登录成功')
+      // 跳转到后台页面
 
-    // }else{
-    //   message.error(result.msg)
-    // }
+      const user = { "name": username }
 
-    const user = {"name":username}
+      memoryUtils.user = user
+      storageUtils.saveUser(user) // 存储到local里
 
-    console.log(user)
-    memoryUtils.user = user
-    storageUtils.saveUser(user) // 存储到local里
+      navigate("/")
 
-    navigate("/")
+    } else {
+      message.error(result.msg)
+    }
 
   };
 
@@ -53,7 +52,7 @@ const App = () => {
   console.log("判定是否登录了",userHistory)
 
   useEffect(() => {
-    const location = window.location;
+    //const location = window.location;
     if (JSON.stringify(userHistory) === '{}') {
       // 跳转到登录页面
       // navigate("/login");

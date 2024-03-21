@@ -222,10 +222,10 @@ const Category = () => {
         pagination={{ defaultPageSize: 5, showQuickJumper: true }}
         loading={loading}
       />
-      <Modal title="添加分类" open={modalStatus === 1} onOk={addCategorys} onCancel={handleCancel} destroyOnClose={true}>
+      <Modal title="添加分类" cancelText='取消' okText='确定' open={modalStatus === 1} onOk={addCategorys} onCancel={handleCancel} destroyOnClose={true}>
         <AddForm categorys={categorys} parentId={parentId} saveForm={saveForm} />
       </Modal>
-      <Modal title="更新分类" open={modalStatus === 2} onOk={updateCategorys} onCancel={handleCancel} destroyOnClose={true} >
+      <Modal title="更新分类" cancelText='取消' okText='确定' open={modalStatus === 2} onOk={updateCategorys} onCancel={handleCancel} destroyOnClose={true} >
         <UpdateForm categoryName={categoryName1} saveForm={saveForm} />
       </Modal>
     </Card>
