@@ -73,10 +73,32 @@ export const reqDeletePicture = (name) => ajax(BASE + "/goods/deletePicture", { 
 export const reqAddOrUpdateGoods = (goods) => ajax(BASE + "/goods/addOrUpdateGoods", goods, 'POST')
 
 // 获取全部角色
-export const reqAllRoles = (roles) => ajax(BASE + "/user/allRoles", roles , 'POST')
+export const reqAllRoles = (roles) => ajax(BASE + "/user/allRoles", roles, 'POST')
 
 // 添加角色
-export const reqAddRole = (name) => ajax(BASE + "/user/addRole", {name}, 'GET')
+export const reqAddRole = (name) => ajax(BASE + "/user/addRole", { name }, 'GET')
 
 // 更新角色的授权页面
 export const reqUpdateRoleAuth = (role) => ajax(BASE + "/user/updateRoleAuth", role, 'POST')
+
+// 获取所有用户
+export const reqAllUsers = (userVO) => ajax(BASE + "/user/allUser", userVO, 'POST')
+
+// 删除用户
+export const reqDeleteUser = (id) => {
+    const data = qs.stringify({
+        id: id,
+    })
+
+    const headers = {
+        'content-type': 'application/x-www-form-urlencoded'
+    };
+
+    return ajax(BASE + '/user/deleteUser', data, 'POST', headers);
+}
+
+// 更新或添加用户
+export const reqUpdateOrInsertUser = (user) => ajax(BASE + "user/addOrUpdateUser", user, 'POST')
+
+// 获取全部角色-选择框
+export const reqSelectRoles = () => ajax(BASE + "user/selectRoles", {}, 'GET')

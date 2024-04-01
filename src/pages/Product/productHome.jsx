@@ -8,12 +8,7 @@ import { reqAllGoods, reqGoodsStatus } from '../../api'
 import { PAGE_SIZE } from '../../utils/constants';
 import { useNavigate } from 'react-router-dom';
 
-
-
 const { Option } = Select;
-
-
-
 
 
 const ProdcutHome = () => {
