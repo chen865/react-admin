@@ -2,7 +2,8 @@ const menuList = [
 {
     title: '首页',
     key: '/home',
-    icon: 'DesktopOutlined'
+    icon: 'DesktopOutlined',
+    isPublic: true // 公开的
 },
 {
     title: '用户管理',

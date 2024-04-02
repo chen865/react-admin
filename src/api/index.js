@@ -102,3 +102,6 @@ export const reqUpdateOrInsertUser = (user) => ajax(BASE + "user/addOrUpdateUser
 
 // 获取全部角色-选择框
 export const reqSelectRoles = () => ajax(BASE + "user/selectRoles", {}, 'GET')
+
+// 获取登录用户的信息
+export const reqLoginUserInfo = (name) => ajax(BASE + "user/loginUserInfo", { name }, 'GET')

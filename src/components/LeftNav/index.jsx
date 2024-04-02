@@ -14,6 +14,7 @@ import {
 import * as Icons from '@ant-design/icons';
 import { Button, Menu, Layout } from 'antd';
 import menuList from '../../config/menuConfig';
+import memoryUtils from '../../utils/memoryUtils';
 
 function getItem(label, key, icon, children, type) {
   return {
@@ -25,6 +26,7 @@ function getItem(label, key, icon, children, type) {
   };
 }
 
+// 之前旧的列表，
 const items = [
   getItem('首页', '/home', <PieChartOutlined />),
   getItem('用户管理', 'user', <DesktopOutlined />),
@@ -49,45 +51,6 @@ console.log("当前路径是：", pathname);
 // 如果是分类下的子标题刷新的时候要展开导航
 let openKey = '';
 
-function buildItems(menuList) {
-  return menuList.map(item => {
-    if (!item.children) {
-      return {
-        key: item.key,
-        icon: React.createElement(Icons[item.icon]),
-        label: item.title,
-      };
-    } else {
-      // 递归处理子元素
-      const childrenItems = buildItems(item.children);
-
-      // 找当前路由匹配的字路由
-      let result = false;
-      item.children.find(cItem => {
-        if( pathname.indexOf(cItem.key) === 0){
-          result = true;
-          pathname = cItem.key;
-        }
-      });
-      
-      if (result) {
-        openKey = item.key;
-      }
-
-      return {
-        key: item.key,
-        icon: React.createElement(Icons[item.icon]),
-        children: childrenItems,
-        label: item.title,
-      };
-    }
-  })
-}
-
-const newitems = buildItems(menuList);
-
-
-
 
 const LeftNav = () => {
 
@@ -102,19 +65,67 @@ const LeftNav = () => {
 
   const handleClick = (item) => {
     console.log('当前key是', item.key)
-    // switch (item.key) {
-    //   case 'home':
-    //     console.log('当前路径home')
-    //     return '/home'; // 首页路径
-    //   case 'about':
-    //     return '/about'; // 关于页面路径
-    //   case 'contact':
-    //     return '/contact'; // 联系页面路径
-    //   default:
-    //     return '/404'; // 未找到路径时跳转至404页面
-    // }
+
     navigate(item.key, { replace: true })
   };
+
+
+  function authMenu(item) {
+    // 判断用户的菜单权限
+    const { key, isPublic } = item;
+    const menu = memoryUtils.user.menus;
+    const roleId = memoryUtils.user.roleId;
+
+    if (roleId === 1 || isPublic || (menu && menu.indexOf(key) !== -1)) {
+      return true;
+    }else if (item.children){
+      return !!item.children.find(child => menu.indexOf(child.key) !== -1);
+    }
+    return false;
+
+  }
+
+  function buildItems(menuList) {
+    return menuList.map(item => {
+
+      // 判断用户的菜单权限
+      if (authMenu(item)) {
+        if (!item.children) {
+          return {
+            key: item.key,
+            icon: React.createElement(Icons[item.icon]),
+            label: item.title,
+          };
+        } else {
+          // 递归处理子元素
+          const childrenItems = buildItems(item.children);
+
+          // 找当前路由匹配的字路由
+          let result = false;
+          item.children.find(cItem => {
+            if (pathname.indexOf(cItem.key) === 0) {
+              result = true;
+              pathname = cItem.key;
+            }
+          });
+
+          if (result) {
+            openKey = item.key;
+          }
+
+          return {
+            key: item.key,
+            icon: React.createElement(Icons[item.icon]),
+            children: childrenItems,
+            label: item.title,
+          };
+        }
+      }
+
+    })
+  }
+
+  const newitems = buildItems(menuList);
 
 
   return (

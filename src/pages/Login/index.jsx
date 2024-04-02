@@ -2,7 +2,7 @@ import React from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, message } from 'antd';
 import './index.css'
-import { reqLogin } from '../../api';
+import { reqLogin, reqLoginUserInfo } from '../../api';
 import { useNavigate } from 'react-router-dom';
 import memoryUtils from '../../utils/memoryUtils';
 import storageUtils from '../../utils/storageUtils';
@@ -27,7 +27,11 @@ const App = () => {
       message.success('登录成功')
       // 跳转到后台页面
 
-      const user = { "name": username }
+      //const user = { "name": username }
+
+      const response = await reqLoginUserInfo(username);
+      const user = response.data.result.data;
+      //console.log("用户信息：", user)
 
       memoryUtils.user = user
       storageUtils.saveUser(user) // 存储到local里
