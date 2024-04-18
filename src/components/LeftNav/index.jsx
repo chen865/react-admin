@@ -75,6 +75,11 @@ const LeftNav = () => {
     const { key, isPublic } = item;
     const menu = memoryUtils.user.menus;
     const roleId = memoryUtils.user.roleId;
+    
+    // menu如果是空的 返回true
+    if (!menu) {
+      return true;
+    }
 
     if (roleId === 1 || isPublic || (menu && menu.indexOf(key) !== -1)) {
       return true;
